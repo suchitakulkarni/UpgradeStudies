@@ -1,5 +1,15 @@
 
-============ HEADER FILE ==============
+============ RUNNING ==============
+
+Configure do.sh, add your cuts and histograms to DelphesLooper, then do
+
+> make
+> do.sh
+
+Output to screen is minimal, so keep an eye on log files in the logs folder,
+especially when trying something new.
+
+============ HOW TO MAKE A NEW HEADER FILE WHEN RUNNING ON A DIFFERENT SKIM ==============
 
 To make a new header file, just open a root file and run MakeClass():
 
