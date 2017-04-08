@@ -1,0 +1,140 @@
+
+$ This is a test configuration for the DAnalysis analyser/skimmer
+$ Comments can be added following a "$"
+$
+$ The first part described the general configuration of the analyser
+$ The output directory will be created in the directory the analyser is
+$ run from
+$ The output file will be created within the output directory and will
+$ contain any histogram that was initialised (see skelton analyser sourcecode)
+$ It is also possible to create a flat ntuple or a skim. In this case,
+$ each sample will result in a unique output file containing the ntuple or skim.
+$ In addition, a new configuration file (like this) will be created that allows
+$ to run over the new skim/ntuple with the DAnalysis framework, too, taking
+$ care of proper normalisation etc.
+$
+
+
+[config-begin]
+
+    Outputdir  = /eos/user/b/bschneid/SUSY_Upgrade_Skimmer/output10_tt-5/
+    Outputfile = outputfile.root
+
+$ The luminosity is to be given to match the cross section values listed in the section "inputfiles"
+$ In this example, the cross sections are given in fb.
+$ In other cases that may be pb and the luminosity value here needs to be multplied by 1000.
+
+    Lumi       = 3000
+
+$ If the testmode is activated, only a fraction of the events will be processed.
+$ This mode is meant to test histogram ranges etc. The scaling does not necessarily
+$ correspond to the relative cross sections of the processes
+
+    Testmode   = true
+
+$ Maximum number of child processes that are spawned simultaneously, each running on a
+$ different input file.
+
+    Maxchilds  = 6
+
+$ This Samplesdir can be a local directory or refer to off-site locations via xrootd
+
+    $Samplesdir = /afs/cern.ch/user/j/jkiesele/public/testsamples
+    Samplesdir = root://eoscms.cern.ch//store/group/upgrade/delphes_output/DelphesFromLHE_333pre16_2016Aug/
+
+
+$ The analyser will have a postProcess() function. This function should be used to
+$ extract parameters from the filled histograms, do additional calculations, etc.
+$ If only this post process function should be run (the histograms are already created)
+$ then this switch can be set to true. The default is "false"
+
+    RunOnOutputOnly = false
+
+[config-end]
+
+
+
+[inputfiles-begin]
+
+$ The input files are defined here. The syntax is the following (separated by ","):
+$
+$ 1) File name relative to Samplesdir
+$    This can also be a directory relative to Samplesdir. In this case, all *.root files
+$    in it will be considered.
+$ 2) Legend name (can contain "#" for root-latex)
+$ 3) Color of the contribution (in root definition)
+$ 4) Cross section of the process
+$ 5) Number of events that were generated. Can be set to "auto" or 0 for automatic determination
+$    Automatic determination emplies that there are no preselection cuts!
+$    In case, a full directory is defined as input (see bullet 1), the total number of events
+$    in all files is considered.
+$ 6) Legend order: The order the samples will appear in a stack plot if the "stackPlotter"
+$    from the DAnalysis framework is used. Numbers don't need to follow one another
+$    (see last line)
+$ 7) Optional signal indicator. In case the signal has to be treated differently in the event loop
+$    this can be indicated here and later checked in the loop.
+$ 8) Optional other options (not used for now)
+
+
+$delphes_testsample.root  , signal,       630, 23, auto, 1, true
+$delphes_testsample.root  , background,   420, 56, auto, 2
+$delphes_testsample.root  , background2,  432, 65, auto, 3
+$/  ,                       background3,  431, 12, auto, 5
+
+$ The last entry is an example for running over all input files in a directory
+
+B-4p-0-1-v1510_14TEV_200PU/                , B   , 630, 200944681.29,  3863215, 1, false
+BB-4p-0-300-v1510_14TEV_200PU/             , BB  , 630,    249977.10, 18693008, 1, false
+BB-4p-300-700-v1510_14TEV_200PU/           , BB  , 630,     35230.62, 12946213, 1, false
+BB-4p-700-1300-v1510_14TEV_200PU/          , BB  , 630,      4137.43, 11239332, 1, false
+BB-4p-1300-2100-v1510_14TEV_200PU/         , BB  , 630,       417.02, 11322227, 1, false
+BB-4p-2100-100000-v1510_14TEV_200PU/       , BB  , 630,        47.70,  9839523, 1, false
+BBB-4p-0-600-v1510_14TEV_200PU/            , BBB , 630,      2573.04, 13423940, 1, false
+BBB-4p-600-1300-v1510_14TEV_200PU/         , BBB , 630,       149.35, 14790247, 1, false
+BBB-4p-1300-100000-v1510_14TEV_200PU/      , BBB , 630,        12.74, 16047607, 1, false
+Bj-4p-0-300-v1510_14TEV_200PU/             , Bj  , 630,  34409923.39,  2810994, 1, false
+Bj-4p-300-600-v1510_14TEV_200PU/           , Bj  , 630,   2642853.09, 12830162, 1, false
+Bj-4p-600-1100-v1510_14TEV_200PU/          , Bj  , 630,    294123.11,  4633655, 1, false
+Bj-4p-1100-1800-v1510_14TEV_200PU/         , Bj  , 630,     25950.00,  5648174, 1, false
+Bj-4p-1800-2700-v1510_14TEV_200PU/         , Bj  , 630,      2421.11,  5530401, 1, false
+Bj-4p-2700-3700-v1510_14TEV_200PU/         , Bj  , 630,       226.90,  4573060, 1, false
+Bj-4p-3700-100000-v1510_14TEV_200PU/       , Bj  , 630,        27.67,  4840718, 1, false
+Bjj-vbf-4p-0-700-v1510_14TEV_200PU/        , Bjj , 630,     86456.04,  5746151, 1, false
+Bjj-vbf-4p-700-1400-v1510_14TEV_200PU/     , Bjj , 630,      4348.69,  7005309, 1, false
+Bjj-vbf-4p-1400-2300-v1510_14TEV_200PU/    , Bjj , 630,       324.65,  6040315, 1, false
+Bjj-vbf-4p-2300-3400-v1510_14TEV_200PU/    , Bjj , 630,        30.32,  5618875, 1, false
+$Bjj-vbf-4p-3400-100000-v1510_14TEV_200PU/  , Bjj , 630,         3.13,     auto, 1, false THIS SAMPLE IS MISSING!
+H-4p-0-300-v1510_14TEV_200PU/              , H   , 630,     21559.90,  6532466, 1, false
+H-4p-300-800-v1510_14TEV_200PU/            , H   , 630,      1112.82,  3788994, 1, false
+H-4p-800-1500-v1510_14TEV_200PU/           , H   , 630,        91.88,  3064444, 1, false
+H-4p-1500-100000-v1510_14TEV_200PU/        , H   , 630,        10.09,  2812594, 1, false
+LL-4p-0-100-v1510_14TEV_200PU/             , LL  , 630,   1341369.23,  7258061, 1, false
+LL-4p-100-200-v1510_14TEV_200PU/           , LL  , 630,    156295.34,  9194762, 1, false
+LL-4p-200-500-v1510_14TEV_200PU/           , LL  , 630,     42401.32,  6633570, 1, false
+LL-4p-500-900-v1510_14TEV_200PU/           , LL  , 630,      2843.73,  6418145, 1, false
+LL-4p-900-1400-v1510_14TEV_200PU/          , LL  , 630,       209.14,  7066491, 1, false
+LL-4p-1400-100000-v1510_14TEV_200PU/       , LL  , 630,        28.91,  7013868, 1, false
+LLB-4p-0-400-v1510_14TEV_200PU/            , LLB , 630,      2973.80,  7697802, 1, false
+LLB-4p-400-900-v1510_14TEV_200PU/          , LLB , 630,       228.54,  6472608, 1, false
+LLB-4p-900-100000-v1510_14TEV_200PU/       , LLB , 630,        20.80, 15966281, 1, false
+tB-4p-0-500-v1510_14TEV_200PU/             , tB  , 630,     63889.23,  8217905, 1, false
+tB-4p-500-900-v1510_14TEV_200PU/           , tB  , 630,      7121.72,  6031970, 1, false
+tB-4p-900-1500-v1510_14TEV_200PU/          , tB  , 630,       980.30,  6030260, 1, false
+tB-4p-1500-2200-v1510_14TEV_200PU/         , tB  , 630,        83.91,  6140657, 1, false
+tB-4p-2200-100000-v1510_14TEV_200PU/       , tB  , 630,         9.53,  6294993, 1, false
+tj-4p-0-500-v1510_14TEV_200PU/             , tj  , 630,    109736.02,  6423908, 1, false
+tj-4p-500-1000-v1510_14TEV_200PU/          , tj  , 630,      5993.25,  4063970, 1, false
+tj-4p-1000-1600-v1510_14TEV_200PU/         , tj  , 630,       376.80,  3740340, 1, false
+tj-4p-1600-2400-v1510_14TEV_200PU/         , tj  , 630,        34.62,  4066519, 1, false
+tj-4p-2400-100000-v1510_14TEV_200PU/       , tj  , 630,         3.12,  4134162, 1, false
+tt-4p-0-600-v1510_14TEV_200PU/             , tt  , 630,    530893.58,  6600943, 1, false
+tt-4p-600-1100-v1510_14TEV_200PU/          , tt  , 630,     42553.51,  4251723, 1, false
+tt-4p-1100-1700-v1510_14TEV_200PU/         , tt  , 630,      4482.09,  4160796, 1, false
+tt-4p-1700-2500-v1510_14TEV_200PU/         , tt  , 630,       527.95,  4031683, 1, false
+tt-4p-2500-100000-v1510_14TEV_200PU/       , tt  , 630,        54.49,  4250822, 1, false
+ttB-4p-0-900-v1510_14TEV_200PU/            , ttB , 630,      2667.30,  9049518, 1, false
+ttB-4p-900-1600-v1510_14TEV_200PU/         , ttB , 630,       250.47,  8186012, 1, false
+ttB-4p-1600-2500-v1510_14TEV_200PU/        , ttB , 630,        23.74,  8929669, 1, false
+ttB-4p-2500-100000-v1510_14TEV_200PU/      , ttB , 630,         2.09, 23821464, 1, false
+
+[inputfiles-end]
