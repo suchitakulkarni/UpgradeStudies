@@ -3,11 +3,14 @@
 
 Configure do.sh, add your cuts and histograms to DelphesLooper, then do
 
-> make
-> do.sh
-
+> make   <-- compile
+> . do.sh  <-- run (and also recompiles just in case)
 Output to screen is minimal, so keep an eye on log files in the logs folder,
 especially when trying something new.
+
+Basic script to merge output root files. Takes as argument the output folder for do.sh
+> . hadd.sh output/test
+
 
 ============ HOW TO MAKE A NEW HEADER FILE WHEN RUNNING ON A DIFFERENT SKIM ==============
 
