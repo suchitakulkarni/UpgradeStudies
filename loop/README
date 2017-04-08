@@ -1,9 +1,36 @@
+
+============ HEADER FILE ==============
+
 To make a new header file, just open a root file and run MakeClass():
 
 root -l /home/gzevi/UpgradeSkims/BB-4p-300-700-v1510_14TEV_200PU_PhaseII_Substructure_PIX4022_1.root.root 
 Delphes->MakeClass()
 
-Need to replace const with static const for all the array delimiters!! Any way to get around it?
+Unfortunately, in order to compile (??) you'll Need to replace "const" with "static const" for all the array delimiters.
+Any way to get around it would be welcome...
+For example, in Delphes.h, replace:
+   const Int_t kMaxElectron = 6;
+with:
+   static const Int_t kMaxElectron = 6;
+
+Also (clumsy, I know) the size of the arrays is determined based on the 1 file for which the MakeClass command was run.
+So feel free to increase them if you suspect some samples will need larger arrays (any samples with more than 6 electrons?)
+
+============ GETTING THE RIGHT CROSS-SECTIONS  ==============
 
 Currently using this cross section file:
 https://raw.githubusercontent.com/basilschneider/SUSY_Upgrade/master/config/configSkimmer.txt
+
+With the current setup, the looper needs to run separately on each LT-bin of each sample, to get the cross-section right
+
+##NOTE## The current setup doesn't automatically get the signal cross-section, I have a hack for that 
+in do.sh, but when we have full scans we'll need a better setup. 
+
+
+============ PLOTTING DETAILS =================
+
+For each new folder (such as "Base" or "2Jets") that you want to produce in your root file,
+remember that you need: (1) to make a <string, TH1> map, (2) to call fillHistos or plot1D using that map,
+and (3) to call savePlotsDir() at the end of the loop to save that folder.
+
+
