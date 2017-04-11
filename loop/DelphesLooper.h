@@ -9,10 +9,18 @@
 #include "TH1.h"
 #include "TH2.h"
 #include "Math/LorentzVector.h"
+#include "TLorentzVector.h"
+
 
 #include "Delphes.h"
 
 typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > LorentzVector;
+
+struct part {
+  TLorentzVector vec;
+  int id;
+};
+
 
 class DelphesLooper {
   
@@ -43,12 +51,29 @@ class DelphesLooper {
   int njet302p5_;
   int njet30_;
   float MET_;
+  int nlep_;
+  int nlepIso_;
+  int BBtype_;
+//  float lep1pt_;
+//  float lep1eta_;
+//  float lep1phi_;
+//  float lep2pt_;
+//  float lep2eta_;
+//  float lep2phi_;
+  std::vector<part> leptons_;
+  std::vector<part> leptonsVeto_;
+
 
   // One histogram map for every directory, plus a global one (h_1d)
   std::map<std::string, TH1*> h_1d;
   std::map<std::string, TH1*> h_1d_base;
   std::map<std::string, TH1*> h_1d_2j;
-
+  std::map<std::string, TH1*> h_1d_WZ;
+  std::map<std::string, TH1*> h_1d_ZZ;
+  std::map<std::string, TH1*> h_1d_SSWW;
+  std::map<std::string, TH1*> h_1d_OSWW;
+  std::map<std::string, TH1*> h_1d_lepVeto;
+  std::map<std::string, TH1*> h_1d_Zveto;
 
 };
 

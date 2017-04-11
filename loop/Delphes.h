@@ -32,11 +32,10 @@ public :
    // Declaration of leaf types
    Int_t           Particle_;
    Int_t           Particle_PID[kMaxParticle];   //[Particle_]
-   Int_t           Particle_M1[kMaxParticle];   //[Particle_]
-   Int_t           Particle_M2[kMaxParticle];   //[Particle_]
    Float_t         Particle_PT[kMaxParticle];   //[Particle_]
    Float_t         Particle_Eta[kMaxParticle];   //[Particle_]
    Float_t         Particle_Phi[kMaxParticle];   //[Particle_]
+   Int_t         Particle_Status[kMaxParticle];   //[Particle_]
    Int_t           Electron_;
    Float_t         Electron_PT[kMaxElectron];   //[Electron_]
    Float_t         Electron_Eta[kMaxElectron];   //[Electron_]
@@ -65,11 +64,10 @@ public :
    // List of branches
    TBranch        *b_Particle_;   //!
    TBranch        *b_Particle_PID;   //!
-   TBranch        *b_Particle_M1;   //!
-   TBranch        *b_Particle_M2;   //!
    TBranch        *b_Particle_PT;   //!
    TBranch        *b_Particle_Eta;   //!
    TBranch        *b_Particle_Phi;   //!
+   TBranch        *b_Particle_Status;   //!
    TBranch        *b_Electron_;   //!
    TBranch        *b_Electron_PT;   //!
    TBranch        *b_Electron_Eta;   //!
@@ -167,11 +165,10 @@ void Delphes::Init(TTree *tree)
 
    fChain->SetBranchAddress("Particle", &Particle_, &b_Particle_);
    fChain->SetBranchAddress("Particle.PID", Particle_PID, &b_Particle_PID);
-   fChain->SetBranchAddress("Particle.M1", Particle_M1, &b_Particle_M1);
-   fChain->SetBranchAddress("Particle.M2", Particle_M2, &b_Particle_M2);
    fChain->SetBranchAddress("Particle.PT", Particle_PT, &b_Particle_PT);
    fChain->SetBranchAddress("Particle.Eta", Particle_Eta, &b_Particle_Eta);
    fChain->SetBranchAddress("Particle.Phi", Particle_Phi, &b_Particle_Phi);
+   fChain->SetBranchAddress("Particle.Status", Particle_Status, &b_Particle_Status);
    fChain->SetBranchAddress("Electron", &Electron_, &b_Electron_);
    fChain->SetBranchAddress("Electron.PT", Electron_PT, &b_Electron_PT);
    fChain->SetBranchAddress("Electron.Eta", Electron_Eta, &b_Electron_Eta);
