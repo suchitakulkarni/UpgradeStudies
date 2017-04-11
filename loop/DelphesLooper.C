@@ -131,6 +131,7 @@ void DelphesLooper::loop(TChain* chain, std::string sample, std::string output_d
 	part lep;
 	lep.vec.SetPtEtaPhiM(pt,d.MuonTight_Eta[i],d.MuonTight_Phi[i],0);
 	lep.id = -13 * d.MuonTight_Charge[i];
+	lep.mt = MT(pt, d.MuonTight_Phi[i], d.PuppiMissingET_MET[0], d.PuppiMissingET_Phi[0]);
 	if (d.MuonTight_IsolationVarRhoCorr[i]/pt > 0.1 || pt < 20) {
 	  leptonsVeto_.push_back(lep);
 	}
@@ -164,7 +165,7 @@ void DelphesLooper::loop(TChain* chain, std::string sample, std::string output_d
       }
 
 
-      HT2p5_ = 0, HT_ = 0, njet302p5_ = 0, njet30_ = 0;
+      HT2p5_ = 0, HT_ = 0, njet30central_ = 0, njet30forward_ = 0, njet30_ = 0;
       for ( int i = 0; i < d.JetPUPPI_ ; ++i) {
 	// Overlap Removal
 	for ( int j = 0; j < d.Electron_ ; ++j) {
@@ -181,8 +182,9 @@ void DelphesLooper::loop(TChain* chain, std::string sample, std::string output_d
 	if (pt>30) {
 	  if (fabs(d.JetPUPPI_Eta[i]) < 2.5 ) {
 	    HT2p5_ += pt;
-	    njet302p5_++;
+	    njet30central_++;
 	  }
+	  else njet30forward_++;
 	  HT_ += pt;
 	  njet30_++;
 	}
@@ -288,6 +290,9 @@ void DelphesLooper::loop(TChain* chain, std::string sample, std::string output_d
       else if (BBtype_==3)   fillHistos(h_1d_SSWW, "SSWW", "");
       else if (BBtype_==4)   fillHistos(h_1d_OSWW, "OSWW", "");
       
+      //      if (mtmin < 120) continue;
+
+
       
     }// end of event loop
     
@@ -325,17 +330,22 @@ void DelphesLooper::fillHistos(std::map<std::string, TH1*>& h_1d, const std::str
 
   plot1D("h_HT2p5"+s, HT2p5_,  evtweight_, h_1d, "HT central [GeV]", 200, 0, 2000);
   plot1D("h_HTfull"+s, HT_,  evtweight_, h_1d, "HT [GeV]", 200, 0, 2000);
-  plot1D("h_njet302p5"+s, njet302p5_,  evtweight_, h_1d, "N_j central", 10, -0.5, 9.5);
+  plot1D("h_njet30central"+s, njet30central_ ,  evtweight_, h_1d, "N_j central", 10, -0.5, 9.5);
+  plot1D("h_njet30forward"+s, njet30forward_ ,  evtweight_, h_1d, "N_j forward", 10, -0.5, 9.5);
   plot1D("h_njet30"+s, njet30_,  evtweight_, h_1d, "N_j", 10, -0.5, 9.5);
   plot1D("h_BBtype"+s, BBtype_,  evtweight_, h_1d, "BB type [Other, WZ, ZZ, SSWW, OSWW]", 10, -0.5, 9.5);
   plot1D("h_MET"+s, MET_,  evtweight_, h_1d, "pT [GeV]", 200, 0, 2000);
   plot1D("h_nlep"+s, nlep_,  evtweight_, h_1d, "Nlep",10, -0.5, 9.5);
   plot1D("h_nlepIso"+s, nlepIso_,  evtweight_, h_1d, "Nlep(iso)", 10, -0.5, 9.5);
+  float mtmin = 999.;
   for ( unsigned int i = 0; i < leptons_.size() ; ++i) {
     const std::string istring = std::to_string(i);
     plot1D("h_leppt"+istring+s, leptons_[i].vec.Pt(),  evtweight_, h_1d, "Lep pT", 100, 0, 100);
     plot1D("h_lepeta"+istring+s, leptons_[i].vec.Eta(),  evtweight_, h_1d, "Lep eta", 40, -5, 5);
+    plot1D("h_lepmt"+istring+s, leptons_[i].mt,  evtweight_, h_1d, "Lep MT", 100, 0, 200);
+    if (leptons_[i].mt < mtmin) mtmin = leptons_[i].mt;
   }
+  plot1D("h_mtmin"+s, mtmin,  evtweight_, h_1d, "MTmin", 100, 0, 200);
 
 
   return;

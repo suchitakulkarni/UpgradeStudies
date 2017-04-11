@@ -19,6 +19,7 @@ typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > LorentzVector;
 struct part {
   TLorentzVector vec;
   int id;
+  float mt;
 };
 
 
@@ -48,7 +49,8 @@ class DelphesLooper {
 
   float HT2p5_;
   float HT_;
-  int njet302p5_;
+  int njet30central_;
+  int njet30forward_;
   int njet30_;
   float MET_;
   int nlep_;
