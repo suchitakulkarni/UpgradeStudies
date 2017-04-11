@@ -91,8 +91,9 @@ void skim(string inpath = "/nfs-6/userdata/mt2/V00-00-03", string outpath = "/tm
   chain->SetBranchStatus("Particle.PT",1);
   chain->SetBranchStatus("Particle.Eta",1);
   chain->SetBranchStatus("Particle.Phi",1);
-  chain->SetBranchStatus("Particle.M1",1);
-  chain->SetBranchStatus("Particle.M2",1);
+  chain->SetBranchStatus("Particle.Status",1);
+//  chain->SetBranchStatus("Particle.M1",1);// Useless because the CMS skim breaks mother-daughter connections: https://github.com/delphes/delphes/blob/master/modules/StatusPidFilter.cc
+//  chain->SetBranchStatus("Particle.M2",1);
 
   //-------------------
   // skim

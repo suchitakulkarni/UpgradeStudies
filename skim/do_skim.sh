@@ -13,13 +13,13 @@ mkdir -p ${OUTPATH}
 #declare -a Samples=(BB0_ntuple)
 
 # Central samples
-#INPATH=root://eoscms.cern.ch//eos/cms/store/group/upgrade/delphes_output/DelphesFromLHE_333pre16_2016Aug/
+INPATH=root://eoscms.cern.ch//eos/cms/store/group/upgrade/delphes_output/DelphesFromLHE_333pre16_2016Aug/
 #declare -a Samples=(BB-4p-0-300-v1510_14TEV_200PU)
-#declare -a Samples=(BB-4p-0-300-v1510_14TEV_200PU BB-4p-1300-2100-v1510_14TEV_200PU BB-4p-2100-100000-v1510_14TEV_200PU BB-4p-300-700-v1510_14TEV_200PU BB-4p-700-1300-v1510_14TEV_200PU)
+declare -a Samples=(BB-4p-0-300-v1510_14TEV_200PU BB-4p-1300-2100-v1510_14TEV_200PU BB-4p-2100-100000-v1510_14TEV_200PU BB-4p-300-700-v1510_14TEV_200PU BB-4p-700-1300-v1510_14TEV_200PU)
 
 # Suchita's C2N4
-INPATH=root://eoscms.cern.ch//eos/cms/store/cmst3/group/susy/upgrade/C2N4_delphised/
-declare -a Samples=(delphised_substructure_200PU) # not a very descriptive name unfortunately
+#INPATH=root://eoscms.cern.ch//eos/cms/store/cmst3/group/susy/upgrade/C2N4_delphised/
+#declare -a Samples=(delphised_substructure_200PU) # not a very descriptive name unfortunately
 
 
 ## Submit without using wildcard: "Samples" contains folder names, but then
