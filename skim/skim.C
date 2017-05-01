@@ -71,6 +71,11 @@ void skim(string inpath = "/nfs-6/userdata/mt2/V00-00-03", string outpath = "/tm
   chain->SetBranchStatus("MuonTight.Phi",1);
   chain->SetBranchStatus("MuonTight.Charge",1);
   chain->SetBranchStatus("MuonTight.IsolationVarRhoCorr",1);
+  chain->SetBranchStatus("MuonLoose.PT",1);
+  chain->SetBranchStatus("MuonLoose.Eta",1);
+  chain->SetBranchStatus("MuonLoose.Phi",1);
+  chain->SetBranchStatus("MuonLoose.Charge",1);
+  chain->SetBranchStatus("MuonLoose.IsolationVarRhoCorr",1);
   chain->SetBranchStatus("Electron.PT",1);
   chain->SetBranchStatus("Electron.Eta",1);
   chain->SetBranchStatus("Electron.Phi",1);
