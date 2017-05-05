@@ -144,7 +144,7 @@ void DelphesLooper::loop(TChain* chain, std::string sample, std::string output_d
       for ( int i = 0; i < d.Electron_ ; ++i) {
 	//cout<<d.Electron_PT[i]<<endl;
 	float pt = d.Electron_PT[i];
-	float eta = d.MuonTight_Eta[i];
+	float eta = d.Electron_Eta[i];
 	plot1D("h_elpt", pt,  evtweight_, h_1d, "pT [GeV]", 40, 0, 400);
 	if (pt < 5) continue;
 	if (eta>1.9549165 && eta<1.9549167) continue; // Hot Spot
@@ -265,23 +265,41 @@ void DelphesLooper::loop(TChain* chain, std::string sample, std::string output_d
 	// GenLevel study of WZ events
 	cout<<"WZ event survived lepton veto! Why?"<<endl;
 	for ( int i = 0; i < d.Particle_ ; ++i) {
+	  if (d.Particle_Status[i]!=1) continue;
 	  if (fabs(d.Particle_PID[i])!=11 && fabs(d.Particle_PID[i])!=13 && fabs(d.Particle_PID[i])!=15 ) continue;
+	  float pt = d.Particle_PT[i];
 	  //cout<<d.Particle_PID[i]<<" "<<d.Particle_Status[i]<<" "<<d.Particle_PT[i]<<" "<<d.Particle_Eta[i]<<endl;
+	  float isel = fabs(d.Particle_PID[i])==11;
+	  float ismu = fabs(d.Particle_PID[i])==13;
+	  plot1D("h_genLepID", d.Particle_PID[i],  evtweight_, h_1d, "mLL [GeV]", 40, -20, 20);
+	  plot1D("h_genLepPT", d.Particle_PT[i],  evtweight_, h_1d, "mLL [GeV]", 100, 0, 100);
+	  plot1D("h_genLepEta", d.Particle_Eta[i],  evtweight_, h_1d, "mLL [GeV]",  40, -5, 5);
+	  if (isel) plot1D("h_genLepEtaEl", d.Particle_Eta[i],  evtweight_, h_1d, "mLL [GeV]",  40, -5, 5);
+	  if (ismu) plot1D("h_genLepEtaMu", d.Particle_Eta[i],  evtweight_, h_1d, "mLL [GeV]",  40, -5, 5);
+	  if (ismu && pt>5) plot1D("h_genLepEtaMuPt5", d.Particle_Eta[i],  evtweight_, h_1d, "mLL [GeV]",  40, -5, 5);
+	  plot1D("h_genLepPhi", d.Particle_Phi[i],  evtweight_, h_1d, "mLL [GeV]",  40, -3.2, 3.2);
 
 	  // Find the "lost lepton"
 	  bool found = false;
-	  if (d.Particle_Status[i]!=1) continue;
 	  //cout<<"GenLep "<<d.Particle_PID[i]<<" "<<d.Particle_Status[i]<<" "<<d.Particle_PT[i]<<" "<<d.Particle_Eta[i]<<endl;
 	  for ( unsigned int j = 0; j < leptons_.size() ; ++j) {
 	    //cout<<"Lep "<<leptons_[j].id<<" "<<leptons_[j].vec.Pt()<<" "<<leptons_[j].vec.Eta()<<endl;
 	    if (d.Particle_PID[i] == leptons_[j].id && fabs(d.Particle_PT[i]-leptons_[j].vec.Pt()) < 1 && fabs(d.Particle_Eta[i]-leptons_[j].vec.Eta())<0.1 ) found = true; // Matched!
 	  }
+	  for ( unsigned int j = 0; j < leptonsVeto_.size() ; ++j) {
+	    //cout<<"Lep "<<leptons_[j].id<<" "<<leptons_[j].vec.Pt()<<" "<<leptons_[j].vec.Eta()<<endl;
+	    if (d.Particle_PID[i] == leptonsVeto_[j].id && fabs(d.Particle_PT[i]-leptonsVeto_[j].vec.Pt()) < 1 && fabs(d.Particle_Eta[i]-leptonsVeto_[j].vec.Eta())<0.1 ) found = true; // Matched!
+	  }
 	  if (!found) {
 	    cout<<"Unmatched GenLep "<<d.Particle_PID[i]<<" "<<d.Particle_Status[i]<<" "<<d.Particle_PT[i]<<" "<<d.Particle_Eta[i]<<endl;
 	    plot1D("h_lostLepID", d.Particle_PID[i],  evtweight_, h_1d, "mLL [GeV]", 40, -20, 20);
 	    plot1D("h_lostLepPT", d.Particle_PT[i],  evtweight_, h_1d, "mLL [GeV]", 100, 0, 100);
-	    plot1D("h_lostLepEta", d.Particle_Eta[i],  evtweight_, h_1d, "mLL [GeV]",  40, -5, 5);
+	    if (ismu) plot1D("h_lostLepEtaMu", d.Particle_Eta[i],  evtweight_, h_1d, "mLL [GeV]",  40, -5, 5);
+	    if (ismu && pt>5) plot1D("h_lostLepEtaMuPt5", d.Particle_Eta[i],  evtweight_, h_1d, "mLL [GeV]",  40, -5, 5);
 	    plot1D("h_lostLepPhi", d.Particle_Phi[i],  evtweight_, h_1d, "mLL [GeV]",  40, -3.2, 3.2);
+	  }
+	  else if (found) {
+	    if (ismu && pt>5) plot1D("h_foundLepEtaMuPt5", d.Particle_Eta[i],  evtweight_, h_1d, "mLL [GeV]",  40, -5, 5);
 	  }
 
 	}
@@ -342,9 +360,14 @@ void DelphesLooper::fillHistos(std::map<std::string, TH1*>& h_1d, const std::str
     const std::string istring = std::to_string(i);
     plot1D("h_leppt"+istring+s, leptons_[i].vec.Pt(),  evtweight_, h_1d, "Lep pT", 100, 0, 100);
     plot1D("h_lepeta"+istring+s, leptons_[i].vec.Eta(),  evtweight_, h_1d, "Lep eta", 40, -5, 5);
+    if (fabs(leptons_[i].id)==13) plot1D("h_lepetamu"+s, leptons_[i].vec.Eta(),  evtweight_, h_1d, "Lep eta", 40, -5, 5);
     plot1D("h_lepmt"+istring+s, leptons_[i].mt,  evtweight_, h_1d, "Lep MT", 100, 0, 200);
     if (leptons_[i].mt < mtmin) mtmin = leptons_[i].mt;
   }
+  for ( unsigned int i = 0; i < leptonsVeto_.size() ; ++i) {
+    if (fabs(leptons_[i].id)==13) plot1D("h_lepetamu"+s, leptonsVeto_[i].vec.Eta(),  evtweight_, h_1d, "Lep eta", 40, -5, 5);
+  }
+
   plot1D("h_mtmin"+s, mtmin,  evtweight_, h_1d, "MTmin", 100, 0, 200);
 
 
