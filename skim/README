@@ -1,0 +1,12 @@
+
+Setup:
+
+. /afs/cern.ch/sw/lcg/external/gcc/4.9/x86_64-slc6-gcc49-opt/setup.sh
+. /afs/cern.ch/sw/lcg/app/releases/ROOT/6.06.06/x86_64-slc6-gcc49-opt/root/bin/thisroot.sh
+
+
+Before launching do_skim.sh, make sure to try one job, for example:
+
+root -b -q skim.C'("root://eoscms.cern.ch//eos/cms/store/group/upgrade/delphes_output/DelphesFromLHE_333pre16_2016Aug/BB-4p-0-300-v1510_14TEV_200PU/", ".", "BB-4p-0-300-v1510_14TEV_200PU_PhaseII_Substructure_PIX4022_1.root")'
+
+Note: do_skim.sh can call either skim.C or advancedskim.C, make sure you are calling the one you want
