@@ -8,10 +8,10 @@ mkdir -p ${OUTDIR}
 mkdir -p ${LOGDIR}
 
 #most recent MC
-INDIR=/home/gzevi/UpgradeSkims11Apr17/
+INDIR=/eos/cms/store/user/gzevi/UpgradeSkims/advanced5May17/
 #INDIR=~gzevi/public/UpgradeSkims/
-#declare -a Samples=(BB-4p-300-700)
-declare -a Samples=(BB-4p-0-300 BB-4p-300-700 BB-4p-700-1300 BB-4p-1300-2100 BB-4p-2100-100000 BBB-4p-0-600 BBB-4p-600-1300 BBB-4p-1300-100000 )
+declare -a Samples=(BB-4p-300-700)
+#declare -a Samples=(BB-4p-0-300 BB-4p-300-700 BB-4p-700-1300 BB-4p-1300-2100 BB-4p-2100-100000 BBB-4p-0-600 BBB-4p-600-1300 BBB-4p-1300-100000 )
 
 for SAMPLE in ${Samples[@]}; do
 

@@ -25,6 +25,7 @@ public :
    static const Int_t kMaxParticle = 105;
    static const Int_t kMaxElectron = 6;
    static const Int_t kMaxMuonTight = 6;
+   static const Int_t kMaxMuonLoose = 6;
    static const Int_t kMaxJetPUPPI = 18;
    static const Int_t kMaxPuppiMissingET = 1;
    static const Int_t kMaxScalarHT = 1;
@@ -32,16 +33,24 @@ public :
    // Declaration of leaf types
    Int_t           Particle_;
    Int_t           Particle_PID[kMaxParticle];   //[Particle_]
+   Int_t           Particle_Status[kMaxParticle];   //[Particle_]
    Float_t         Particle_PT[kMaxParticle];   //[Particle_]
    Float_t         Particle_Eta[kMaxParticle];   //[Particle_]
    Float_t         Particle_Phi[kMaxParticle];   //[Particle_]
-   Int_t         Particle_Status[kMaxParticle];   //[Particle_]
    Int_t           Electron_;
    Float_t         Electron_PT[kMaxElectron];   //[Electron_]
    Float_t         Electron_Eta[kMaxElectron];   //[Electron_]
    Float_t         Electron_Phi[kMaxElectron];   //[Electron_]
    Int_t           Electron_Charge[kMaxElectron];   //[Electron_]
    Float_t         Electron_IsolationVarRhoCorr[kMaxElectron];   //[Electron_]
+   Int_t           Electron_size;
+   Int_t           MuonLoose_;
+   Float_t         MuonLoose_PT[kMaxMuonLoose];   //[MuonLoose_]
+   Float_t         MuonLoose_Eta[kMaxMuonLoose];   //[MuonLoose_]
+   Float_t         MuonLoose_Phi[kMaxMuonLoose];   //[MuonLoose_]
+   Int_t           MuonLoose_Charge[kMaxMuonLoose];   //[MuonLoose_]
+   Float_t         MuonLoose_IsolationVarRhoCorr[kMaxMuonLoose];   //[MuonLoose_]
+   Int_t           MuonLoose_size;
    Int_t           MuonTight_;
    Float_t         MuonTight_PT[kMaxMuonTight];   //[MuonTight_]
    Float_t         MuonTight_Eta[kMaxMuonTight];   //[MuonTight_]
@@ -64,16 +73,24 @@ public :
    // List of branches
    TBranch        *b_Particle_;   //!
    TBranch        *b_Particle_PID;   //!
+   TBranch        *b_Particle_Status;   //!
    TBranch        *b_Particle_PT;   //!
    TBranch        *b_Particle_Eta;   //!
    TBranch        *b_Particle_Phi;   //!
-   TBranch        *b_Particle_Status;   //!
    TBranch        *b_Electron_;   //!
    TBranch        *b_Electron_PT;   //!
    TBranch        *b_Electron_Eta;   //!
    TBranch        *b_Electron_Phi;   //!
    TBranch        *b_Electron_Charge;   //!
    TBranch        *b_Electron_IsolationVarRhoCorr;   //!
+   TBranch        *b_Electron_size;   //!
+   TBranch        *b_MuonLoose_;   //!
+   TBranch        *b_MuonLoose_PT;   //!
+   TBranch        *b_MuonLoose_Eta;   //!
+   TBranch        *b_MuonLoose_Phi;   //!
+   TBranch        *b_MuonLoose_Charge;   //!
+   TBranch        *b_MuonLoose_IsolationVarRhoCorr;   //!
+   TBranch        *b_MuonLoose_size;   //!
    TBranch        *b_MuonTight_;   //!
    TBranch        *b_MuonTight_PT;   //!
    TBranch        *b_MuonTight_Eta;   //!
@@ -165,16 +182,24 @@ void Delphes::Init(TTree *tree)
 
    fChain->SetBranchAddress("Particle", &Particle_, &b_Particle_);
    fChain->SetBranchAddress("Particle.PID", Particle_PID, &b_Particle_PID);
+   fChain->SetBranchAddress("Particle.Status", Particle_Status, &b_Particle_Status);
    fChain->SetBranchAddress("Particle.PT", Particle_PT, &b_Particle_PT);
    fChain->SetBranchAddress("Particle.Eta", Particle_Eta, &b_Particle_Eta);
    fChain->SetBranchAddress("Particle.Phi", Particle_Phi, &b_Particle_Phi);
-   fChain->SetBranchAddress("Particle.Status", Particle_Status, &b_Particle_Status);
    fChain->SetBranchAddress("Electron", &Electron_, &b_Electron_);
    fChain->SetBranchAddress("Electron.PT", Electron_PT, &b_Electron_PT);
    fChain->SetBranchAddress("Electron.Eta", Electron_Eta, &b_Electron_Eta);
    fChain->SetBranchAddress("Electron.Phi", Electron_Phi, &b_Electron_Phi);
    fChain->SetBranchAddress("Electron.Charge", Electron_Charge, &b_Electron_Charge);
    fChain->SetBranchAddress("Electron.IsolationVarRhoCorr", Electron_IsolationVarRhoCorr, &b_Electron_IsolationVarRhoCorr);
+   fChain->SetBranchAddress("Electron_size", &Electron_size, &b_Electron_size);
+   fChain->SetBranchAddress("MuonLoose", &MuonLoose_, &b_MuonLoose_);
+   fChain->SetBranchAddress("MuonLoose.PT", MuonLoose_PT, &b_MuonLoose_PT);
+   fChain->SetBranchAddress("MuonLoose.Eta", MuonLoose_Eta, &b_MuonLoose_Eta);
+   fChain->SetBranchAddress("MuonLoose.Phi", MuonLoose_Phi, &b_MuonLoose_Phi);
+   fChain->SetBranchAddress("MuonLoose.Charge", MuonLoose_Charge, &b_MuonLoose_Charge);
+   fChain->SetBranchAddress("MuonLoose.IsolationVarRhoCorr", MuonLoose_IsolationVarRhoCorr, &b_MuonLoose_IsolationVarRhoCorr);
+   fChain->SetBranchAddress("MuonLoose_size", &MuonLoose_size, &b_MuonLoose_size);
    fChain->SetBranchAddress("MuonTight", &MuonTight_, &b_MuonTight_);
    fChain->SetBranchAddress("MuonTight.PT", MuonTight_PT, &b_MuonTight_PT);
    fChain->SetBranchAddress("MuonTight.Eta", MuonTight_Eta, &b_MuonTight_Eta);
